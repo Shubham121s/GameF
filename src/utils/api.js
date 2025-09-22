@@ -2,7 +2,8 @@ import axios from "axios";
 
 // Base API configuration
 const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+  process.env.REACT_APP_API_URL ||
+  "https://gamechanges-backend.onrender.com/api";
 
 // Ensure a development token exists locally to access admin APIs during local dev
 if (typeof window !== "undefined") {
@@ -195,7 +196,9 @@ export const userAPI = {
 
 export default api;
 
-const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+const API_BASE =
+  process.env.REACT_APP_API_URL ||
+  "https://gamechanges-backend.onrender.com/api";
 
 export const getResultTables = async (roundId) => {
   try {

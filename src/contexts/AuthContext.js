@@ -93,10 +93,16 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       console.log("🚀 Login attempt:", credentials);
+      console.log(
+        "🌐 API Base URL:",
+        process.env.REACT_APP_API_URL ||
+          "https://gamechanges-backend.onrender.com/api"
+      );
 
       // First try admin login (only if username is "admin")
       if (credentials.username === "admin") {
         try {
+          console.log("🔐 Attempting admin login...");
           const response = await authAPI.adminLogin(credentials);
           console.log("✅ Admin API Response:", response.data);
 
@@ -124,8 +130,19 @@ export const AuthProvider = ({ children }) => {
         } catch (adminError) {
           console.log(
             "❌ Admin login failed:",
-            adminError.response?.data?.message
+            adminError.response?.data?.message || adminError.message
           );
+          if (!adminError.response) {
+            console.log(
+              "🔥 Network error - backend might be down or unreachable"
+            );
+          } else {
+            console.log(
+              "🔥 Backend responded with error:",
+              adminError.response.status,
+              adminError.response.data
+            );
+          }
         }
       }
 
@@ -164,19 +181,42 @@ export const AuthProvider = ({ children }) => {
       } catch (agentError) {
         console.log(
           "❌ Agent login failed:",
-          agentError.response?.data?.message
+          agentError.response?.data?.message || agentError.message
         );
+        if (!agentError.response) {
+          console.log(
+            "🔥 Network error - backend might be down or unreachable"
+          );
+        } else {
+          console.log(
+            "🔥 Backend responded with error:",
+            agentError.response.status,
+            agentError.response.data
+          );
+        }
+      }
+
+      // If both admin and agent login failed, provide appropriate error message
+      return {
+        success: false,
+        error: "Invalid credentials. Please check your username and password.",
+      };
+    } catch (error) {
+      console.error("❌ Login error:", error);
+
+      // Handle network errors specifically
+      if (!error.response) {
+        return {
+          success: false,
+          error:
+            "Cannot connect to server. Please check your internet connection and try again.",
+        };
       }
 
       return {
         success: false,
-        error: "Invalid credentials",
-      };
-    } catch (error) {
-      console.error("❌ Login error:", error);
-      return {
-        success: false,
-        error: error.response?.data?.message || "Invalid credentials",
+        error:
+          error.response?.data?.message || "Login failed. Please try again.",
       };
     }
   };
