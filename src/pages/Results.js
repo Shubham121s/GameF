@@ -27,7 +27,7 @@ import {
   FaEye,
 } from "react-icons/fa";
 import { gameAPI } from "../utils/api";
-import { showAlert, formatDate } from "../utils/helpers";
+import { showAlert } from "../utils/helpers";
 import axios from "axios";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
