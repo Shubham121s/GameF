@@ -1,9 +1,26 @@
 import axios from "axios";
 
 // Base API configuration
-const API_BASE_URL =
-  process.env.REACT_APP_API_URL ||
-  "https://gamechanges-backend.onrender.com/api";
+// Use environment variable if set, otherwise detect environment
+const getApiBaseUrl = () => {
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+
+  // For development (localhost), use local backend
+  if (
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1")
+  ) {
+    return "http://localhost:5000/api";
+  }
+
+  // For production, use the Render backend
+  return "https://gamechangesbe-1.onrender.com/api";
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Ensure a development token exists locally to access admin APIs during local dev
 if (typeof window !== "undefined") {
@@ -196,9 +213,7 @@ export const userAPI = {
 
 export default api;
 
-const API_BASE =
-  process.env.REACT_APP_API_URL ||
-  "https://gamechanges-backend.onrender.com/api";
+const API_BASE = getApiBaseUrl();
 
 export const getResultTables = async (roundId) => {
   try {
