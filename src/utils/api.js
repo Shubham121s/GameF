@@ -17,7 +17,7 @@ const getApiBaseUrl = () => {
   }
 
   // For production, use the Render backend
-  return "https://gamechangesbe-1.onrender.com/api";
+  return "https://gameb-tvua.onrender.com/api";
 };
 
 const API_BASE_URL = getApiBaseUrl();
