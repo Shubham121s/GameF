@@ -29,6 +29,8 @@ import {
 import { gameAPI } from "../utils/api";
 import { showAlert } from "../utils/helpers";
 import axios from "axios";
+import { format } from "date-fns";
+
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
@@ -129,6 +131,12 @@ const Results = ({ roundId }) => {
     }
   }, []);
 
+  const formatDate = (dateString) => {
+  if (!dateString) return "";
+  return format(new Date(dateString), "dd-MMM-yyyy"); 
+};
+
+
   // Mock data for testing
   const loadMockData = () => {
     // Generate current time slot dynamically
@@ -162,6 +170,9 @@ const Results = ({ roundId }) => {
         remainingMinutes: 60 - now.getMinutes(), // Actual remaining minutes
       },
     };
+
+
+   
 
     const mockResultTables = {
       statistics: {
